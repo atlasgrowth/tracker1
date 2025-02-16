@@ -55,11 +55,9 @@ export default function BusinessDetails() {
     <div className="container mx-auto p-4 space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-sm text-gray-600">
-          <Link href="/">
-            <a className="flex items-center gap-1 hover:text-gray-900">
-              <Home className="h-4 w-4" />
-              Home
-            </a>
+          <Link className="flex items-center gap-1 hover:text-gray-900" href="/">
+            <Home className="h-4 w-4" />
+            Home
           </Link>
           <ChevronRight className="h-4 w-4" />
           <span>{business.name}</span>
