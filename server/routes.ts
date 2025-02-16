@@ -145,8 +145,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Business not found" });
       }
 
-      // Update the business stage to website_viewed if it's currently in website_sent
-      if (business.pipelineStage === "website_sent") {
+      // Update the business stage to website_viewed if it's in an earlier stage
+      if (business.pipelineStage === "website_created" || business.pipelineStage === "website_sent") {
         await storage.updateBusinessStage(business.siteId, "website_viewed");
       }
 
