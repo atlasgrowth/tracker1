@@ -59,12 +59,14 @@ export function AnalyticsDashboard({ siteId }: AnalyticsDashboardProps) {
       }
     });
 
-    // Calculate time spent on each page
-    analytics.pageViews.forEach((view: any) => {
-      if (pageTransitions[view.path]) {
-        pageTransitions[view.path].timeSpent += view.timeSpent || 0;
-      }
-    });
+    // Calculate time spent on each page from visit analytics
+    if (visitAnalytics?.pageViews) {
+      visitAnalytics.pageViews.forEach((view: any) => {
+        if (pageTransitions[view.path]) {
+          pageTransitions[view.path].timeSpent += view.timeSpent || 0;
+        }
+      });
+    }
   }
 
   return (
