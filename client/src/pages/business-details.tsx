@@ -142,7 +142,7 @@ export default function BusinessDetails() {
         </CardContent>
       </Card>
 
-      <AnalyticsDashboard businessId={business.id} />
+      <AnalyticsDashboard businessId={business.id} siteId={business.siteId} />
     </div>
   );
 }

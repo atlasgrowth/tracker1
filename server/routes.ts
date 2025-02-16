@@ -112,6 +112,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get business visits
+  app.get("/api/businesses/:siteId/visits", async (req, res) => {
+    try {
+      const business = await storage.getBusiness(req.params.siteId);
+      if (!business) {
+        return res.status(404).json({ message: "Business not found" });
+      }
+      const visits = await storage.getVisits(business.id);
+      res.json(visits);
+    } catch (error) {
+      console.error('Error fetching visits:', error);
+      res.status(500).json({ message: "Failed to fetch visits" });
+    }
+  });
+
   // Record visit
   app.post("/api/businesses/:siteId/visits", async (req, res) => {
     const schema = z.object({
@@ -130,6 +145,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Business not found" });
       }
 
+      // Update the business stage to website_viewed if it's currently in website_sent
+      if (business.pipelineStage === "website_sent") {
+        await storage.updateBusinessStage(business.siteId, "website_viewed");
+      }
+
       const visit = await storage.recordVisit(
         business.id,
         result.data.duration,
@@ -139,21 +159,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error recording visit:', error);
       res.status(500).json({ message: "Failed to record visit" });
-    }
-  });
-
-  // Get business visits
-  app.get("/api/businesses/:siteId/visits", async (req, res) => {
-    try {
-      const business = await storage.getBusiness(req.params.siteId);
-      if (!business) {
-        return res.status(404).json({ message: "Business not found" });
-      }
-      const visits = await storage.getVisits(req.params.siteId);
-      res.json(visits);
-    } catch (error) {
-      console.error('Error fetching visits:', error);
-      res.status(500).json({ message: "Failed to fetch visits" });
     }
   });
 
