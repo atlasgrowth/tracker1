@@ -12,7 +12,9 @@ export interface IStorage {
 
   // Visit operations
   recordVisit(siteId: string, duration: number, source: string): Promise<Visit>;
-  getVisits(businessId: number): Promise<Visit[]>;
+
+  // CHANGED this to use siteId: string
+  getVisits(siteId: string): Promise<Visit[]>;
 }
 
 interface MetadataBusinesses {
@@ -177,27 +179,26 @@ export class MemStorage implements IStorage {
     businessVisits.push(visit);
     this.visits.set(business.id, businessVisits);
 
-    // Update business visit stats and pipeline stage 
+    // Update business visit stats and pipeline stage
     business.lastViewed = visit.timestamp;
     business.totalViews = (business.totalViews || 0) + 1;
-      business.lastViewed = visit.timestamp;
-      business.totalViews = (business.totalViews || 0) + 1;
 
-      // Update pipeline stage to website_viewed if it's in an earlier stage
-      console.log(`Current pipeline stage for ${business.name}: ${business.pipelineStage}`);
-      if (business.pipelineStage === "website_created" || business.pipelineStage === "website_sent") {
-        business.pipelineStage = "website_viewed";
-        console.log(`Updated pipeline stage to website_viewed for business ${business.name}`);
-      } else {
-        console.log(`No stage update needed for ${business.name} (current stage: ${business.pipelineStage})`);
-      }
+    // Update pipeline stage to website_viewed if it's in an earlier stage
+    console.log(`Current pipeline stage for ${business.name}: ${business.pipelineStage}`);
+    if (business.pipelineStage === "website_created" || business.pipelineStage === "website_sent") {
+      business.pipelineStage = "website_viewed";
+      console.log(`Updated pipeline stage to website_viewed for business ${business.name}`);
+    } else {
+      console.log(`No stage update needed for ${business.name} (current stage: ${business.pipelineStage})`);
+    }
 
-      this.businesses.set(business.siteId, business);
+    this.businesses.set(business.siteId, business);
 
     console.log(`Recorded visit for business ${siteId}, duration: ${duration}s, source: ${source}`);
     return visit;
   }
 
+  // CHANGED the parameter to siteId: string, so it matches the IStorage interface
   async getVisits(siteId: string): Promise<Visit[]> {
     const business = await this.getBusiness(siteId);
     if (!business) return [];

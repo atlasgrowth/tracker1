@@ -127,14 +127,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get business visits
+  // Get business visits (FIXED: use siteId: string)
   app.get("/api/businesses/:siteId/visits", async (req, res) => {
     try {
       const business = await storage.getBusiness(req.params.siteId);
       if (!business) {
         return res.status(404).json({ message: "Business not found" });
       }
-      const visits = await storage.getVisits(business.id);
+      // Updated line: pass siteId (string) to getVisits()
+      const visits = await storage.getVisits(req.params.siteId);
       res.json(visits);
     } catch (error) {
       console.error('Error fetching visits:', error);
@@ -172,6 +173,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Record analytics
   app.post("/api/businesses/:siteId/analytics", async (req, res) => {
     try {
       const result = sessionSchema.safeParse(req.body);
