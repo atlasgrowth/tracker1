@@ -1,7 +1,7 @@
 
 import { Link } from "wouter";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Mail, Pipeline } from "lucide-react";
+import { Mail, PipelineIcon } from "lucide-react";
 
 export default function Home() {
   return (
@@ -14,7 +14,7 @@ export default function Home() {
           <Card className="cursor-pointer hover:shadow-lg transition-shadow">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Pipeline className="h-6 w-6" />
+                <PipelineIcon className="h-6 w-6" />
                 Pipeline Dashboard
               </CardTitle>
             </CardHeader>
