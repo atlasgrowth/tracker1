@@ -5,6 +5,7 @@ import { insertBusinessSchema, PIPELINE_STAGES } from "@shared/schema";
 import { z } from "zod";
 import { join } from "path";
 import { promises as fs } from "fs";
+import express from "express";
 
 const deviceInfoSchema = z.object({
   browser: z.string(),
@@ -51,6 +52,20 @@ const sessionSchema = z.object({
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: false }));
+
+  // Add CORS headers
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PATCH');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Origin');
+    if (req.method === 'OPTIONS') {
+      return res.sendStatus(204);
+    }
+    next();
+  });
+
   // Get all businesses
   app.get("/api/businesses", async (req, res) => {
     const businesses = await storage.getBusinesses();

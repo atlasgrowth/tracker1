@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,56 +8,53 @@
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
 
-    <!-- Tracking Code -->
     <script>
-      const urlParams = new URLSearchParams(window.location.search);
-      const siteId = urlParams.get('site_id');
+    const API_URL = 'https://e1ad1fcb-e0d6-4975-9d66-21666cc89433-00-edqcrzbbmbuj.riker.replit.dev';
+    const urlParams = new URLSearchParams(window.location.search);
+    const siteId = urlParams.get('site_id');
 
-      if (siteId) {
-        // Record initial visit immediately
-        fetch('https://e1ad1fcb-e0d6-4975-9d66-21666cc89433-00-edqcrzbbmbuj.riker.replit.dev/api/businesses/' + siteId + '/visits', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            duration: 0,
-            source: document.referrer || 'direct'
-          })
-        });
+    if (siteId) {
+      const SESSION = {
+        siteId: siteId,
+        startTime: Date.now(),
+        pageViews: [{
+          path: window.location.pathname + window.location.search,
+          timestamp: Date.now(),
+          deviceInfo: {
+            browser: navigator.userAgent,
+            os: navigator.platform,
+            screenSize: { width: window.screen.width, height: window.screen.height }
+          }
+        }]
+      };
 
-        const SESSION = {
-          siteId: siteId,
-          startTime: Date.now(),
-          pageViews: [{
-            path: window.location.pathname + window.location.search,
-            timestamp: Date.now(),
-            deviceInfo: {
-              browser: navigator.userAgent,
-              os: navigator.platform,
-              screenSize: { width: window.screen.width, height: window.screen.height }
-            }
-          }]
-        };
+      // Record initial visit
+      fetch(`${API_URL}/api/businesses/${siteId}/visits`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Origin': window.location.origin
+        },
+        mode: 'cors',
+        body: JSON.stringify({
+          duration: 0,
+          source: document.referrer || 'direct'
+        })
+      }).catch(e => console.warn('Initial visit recording failed:', e));
 
-        // Use navigator.sendBeacon for more reliable data sending on page unload
-        window.addEventListener('beforeunload', () => {
-          const duration = Math.round((Date.now() - SESSION.startTime) / 1000);
-          
-          // Send visit duration
-          navigator.sendBeacon(
-            'https://e1ad1fcb-e0d6-4975-9d66-21666cc89433-00-edqcrzbbmbuj.riker.replit.dev/api/businesses/' + siteId + '/visits',
-            JSON.stringify({
-              duration: duration,
-              source: document.referrer || 'direct'
-            })
-          );
+      // Send data when user leaves using sendBeacon
+      window.addEventListener('beforeunload', () => {
+        const visitData = new Blob([JSON.stringify({
+          duration: Math.round((Date.now() - SESSION.startTime) / 1000),
+          source: document.referrer || 'direct'
+        })], { type: 'application/json' });
 
-          // Send analytics data
-          navigator.sendBeacon(
-            'https://e1ad1fcb-e0d6-4975-9d66-21666cc89433-00-edqcrzbbmbuj.riker.replit.dev/api/businesses/' + siteId + '/analytics',
-            JSON.stringify(SESSION)
-          );
-        });
-      }
-    </script>
+        const analyticsData = new Blob([JSON.stringify(SESSION)], { type: 'application/json' });
+
+        navigator.sendBeacon(`${API_URL}/api/businesses/${siteId}/visits`, visitData);
+        navigator.sendBeacon(`${API_URL}/api/businesses/${siteId}/analytics`, analyticsData);
+      });
+    }
+  </script>
   </body>
 </html>
