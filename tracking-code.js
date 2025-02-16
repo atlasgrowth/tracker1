@@ -7,6 +7,7 @@
   if (siteId) {
     // Initialize session data
     const SESSION = {
+      id: Date.now(),  // Add unique ID
       siteId: siteId,
       startTime: Date.now(),
       lastActive: Date.now(),
@@ -78,7 +79,7 @@
     // Send analytics data
     async function sendAnalytics() {
       const PIPELINE_URL = 'https://bbd5027a-f3b6-48cb-b2e3-7c31fdf9c394-00-1a4b9g7vepksy.janeway.replit.dev';
-      
+
       try {
         // Record visit duration
         await fetch(`${PIPELINE_URL}/api/businesses/${siteId}/visits`, {

@@ -230,9 +230,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         analytics.deviceStats.browsers[browser] = (analytics.deviceStats.browsers[browser] || 0) + 1;
         analytics.deviceStats.os[os] = (analytics.deviceStats.os[os] || 0) + 1;
         
-        // Add visit-specific data
+        // Add visit-specific data with session ID matching the visit
         analytics.visits.push({
-          id: data.id,
+          id: data.startTime, // Use startTime as ID to match with visits
           navigationPath: data.navigationPath,
           pageViews: data.pageViews
         });
