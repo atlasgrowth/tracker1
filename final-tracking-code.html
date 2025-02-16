@@ -1,4 +1,4 @@
-<!-- Add this right before closing </body> tag in your website -->
+<!-- Add this right before the closing </body> tag of your website -->
 <script>
   // Get the business ID from URL parameters
   const urlParams = new URLSearchParams(window.location.search);
@@ -117,7 +117,7 @@
     // Start tracking
     recordPageView();
 
-    // Send analytics every 30 seconds
+    // Send analytics periodically to avoid data loss
     setInterval(sendAnalytics, 30000);
   }
 </script>

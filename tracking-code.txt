@@ -1,4 +1,3 @@
-<!-- Add this right before closing </body> tag in your website -->
 <script>
   // Get the business ID from URL parameters
   const urlParams = new URLSearchParams(window.location.search);
@@ -85,7 +84,6 @@
       const PIPELINE_URL = 'https://bbd5027a-f3b6-48cb-b2e3-7c31fdf9c394-00-1a4b9g7vepksy.janeway.replit.dev';
 
       try {
-        // Send visit data and update pipeline stage
         await fetch(`${PIPELINE_URL}/api/businesses/${siteId}/visits`, {
           method: 'POST',
           headers: { 
@@ -99,7 +97,6 @@
           mode: 'cors'
         });
 
-        // Send analytics data
         await fetch(`${PIPELINE_URL}/api/businesses/${siteId}/analytics`, {
           method: 'POST',
           headers: { 

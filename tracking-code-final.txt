@@ -1,4 +1,4 @@
-<!-- Add this right before closing </body> tag in your website -->
+<!-- Add this right before the closing </body> tag -->
 <script>
   // Get the business ID from URL parameters
   const urlParams = new URLSearchParams(window.location.search);
