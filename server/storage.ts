@@ -161,21 +161,24 @@ export class MemStorage implements IStorage {
     return business;
   }
 
-  async recordVisit(businessId: number, duration: number, source: string): Promise<Visit> {
+  async recordVisit(siteId: string, duration: number, source: string): Promise<Visit> {
     const visit: Visit = {
       id: this.visitId++,
-      businessId,
+      siteId,
       timestamp: new Date(),
       duration,
       source
     };
 
-    const businessVisits = this.visits.get(businessId) || [];
-    businessVisits.push(visit);
-    this.visits.set(businessId, businessVisits);
+    const business = await this.getBusiness(siteId);
+    if (!business) throw new Error("Business not found");
 
-    // Update business visit stats and pipeline stage
-    const business = Array.from(this.businesses.values()).find(b => b.id === businessId);
+    const businessVisits = this.visits.get(business.id) || [];
+    businessVisits.push(visit);
+    this.visits.set(business.id, businessVisits);
+
+    // Update business visit stats and pipeline stage 
+    const business = await this.getBusiness(siteId);
     if (business) {
       business.lastViewed = visit.timestamp;
       business.totalViews = (business.totalViews || 0) + 1;

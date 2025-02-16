@@ -21,7 +21,7 @@ export const businesses = pgTable("businesses", {
 
 export const visits = pgTable("visits", {
   id: serial("id").primaryKey(),
-  businessId: integer("business_id").notNull(),
+  siteId: text("site_id").notNull(),
   timestamp: timestamp("timestamp").notNull(),
   duration: integer("duration"), // in seconds
   source: text("source")
