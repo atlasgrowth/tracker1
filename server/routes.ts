@@ -212,7 +212,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const analytics = {
         pageViews: {},
         totalVisits: siteFiles.length,
-        deviceStats: { browsers: {}, os: {} }
+        deviceStats: { browsers: {}, os: {} },
+        visits: []
       };
 
       for (const file of siteFiles) {
@@ -228,6 +229,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const os = data.deviceInfo.os;
         analytics.deviceStats.browsers[browser] = (analytics.deviceStats.browsers[browser] || 0) + 1;
         analytics.deviceStats.os[os] = (analytics.deviceStats.os[os] || 0) + 1;
+        
+        // Add visit-specific data
+        analytics.visits.push({
+          id: data.id,
+          navigationPath: data.navigationPath,
+          pageViews: data.pageViews
+        });
       }
 
       res.json(analytics);

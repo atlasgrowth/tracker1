@@ -46,8 +46,11 @@ export function AnalyticsDashboard({ siteId }: AnalyticsDashboardProps) {
   // Process page transitions
   const pageTransitions: Record<string, { to: Record<string, number>, timeSpent: number }> = {};
   
-  if (analytics?.navigationPath) {
-    analytics.navigationPath.forEach((path: string, i: number, arr: string[]) => {
+  // Find the analytics file for the selected visit
+  const visitAnalytics = analytics?.visits?.find((v: any) => v.id === selectedVisit?.id);
+  
+  if (visitAnalytics?.navigationPath) {
+    visitAnalytics.navigationPath.forEach((path: string, i: number, arr: string[]) => {
       if (!pageTransitions[path]) {
         pageTransitions[path] = { to: {}, timeSpent: 0 };
       }
