@@ -1,4 +1,4 @@
-<!-- Add this right before the closing </body> tag -->
+<!-- Add this script just before closing </body> tag -->
 <script>
   // Get the business ID from URL parameters
   const urlParams = new URLSearchParams(window.location.search);
@@ -18,10 +18,6 @@
           height: window.screen.height
         }
       },
-      locationInfo: {
-        country: 'Unknown',
-        region: 'Unknown'
-      },
       pageViews: [],
       clicks: [],
       navigationPath: []
@@ -35,7 +31,10 @@
         timeSpent: 0,
         scrollDepth: 0,
         deviceInfo: SESSION.deviceInfo,
-        location: SESSION.locationInfo
+        location: { 
+          country: 'Unknown', 
+          region: 'Unknown' 
+        }
       };
 
       // Calculate scroll depth
@@ -85,7 +84,7 @@
       const PIPELINE_URL = 'https://bbd5027a-f3b6-48cb-b2e3-7c31fdf9c394-00-1a4b9g7vepksy.janeway.replit.dev';
 
       try {
-        // Send visit data and update pipeline stage
+        // Record visit duration
         await fetch(`${PIPELINE_URL}/api/businesses/${siteId}/visits`, {
           method: 'POST',
           headers: { 
@@ -95,19 +94,17 @@
           body: JSON.stringify({
             duration: Math.round((Date.now() - SESSION.startTime) / 1000),
             source: document.referrer || 'direct'
-          }),
-          mode: 'cors'
+          })
         });
 
-        // Send detailed analytics data
+        // Send detailed analytics
         await fetch(`${PIPELINE_URL}/api/businesses/${siteId}/analytics`, {
           method: 'POST',
           headers: { 
             'Content-Type': 'application/json',
             'Accept': 'application/json'
           },
-          body: JSON.stringify(SESSION),
-          mode: 'cors'
+          body: JSON.stringify(SESSION)
         });
       } catch (e) {
         console.error('Failed to send analytics:', e);
@@ -117,7 +114,7 @@
     // Start tracking
     recordPageView();
 
-    // Send analytics periodically to avoid data loss
+    // Send analytics periodically (every 30 seconds) to avoid data loss
     setInterval(sendAnalytics, 30000);
   }
 </script>
