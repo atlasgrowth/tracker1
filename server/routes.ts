@@ -202,6 +202,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get analytics
+  app.get("/api/businesses/:siteId/analytics", async (req, res) => {
+    try {
+      const analyticsDir = join(process.cwd(), "analytics");
+      const files = await fs.readdir(analyticsDir);
+      const siteFiles = files.filter(f => f.startsWith(`analytics_${req.params.siteId}_`));
+      
+      const analytics = {
+        pageViews: {},
+        totalVisits: siteFiles.length,
+        deviceStats: { browsers: {}, os: {} }
+      };
+
+      for (const file of siteFiles) {
+        const data = JSON.parse(await fs.readFile(join(analyticsDir, file), 'utf-8'));
+        
+        // Aggregate page views
+        data.pageViews.forEach(view => {
+          analytics.pageViews[view.path] = (analytics.pageViews[view.path] || 0) + 1;
+        });
+
+        // Aggregate device stats
+        const browser = data.deviceInfo.browser;
+        const os = data.deviceInfo.os;
+        analytics.deviceStats.browsers[browser] = (analytics.deviceStats.browsers[browser] || 0) + 1;
+        analytics.deviceStats.os[os] = (analytics.deviceStats.os[os] || 0) + 1;
+      }
+
+      res.json(analytics);
+    } catch (error) {
+      console.error("Error processing analytics:", error);
+      res.status(500).json({ message: "Failed to process analytics" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }
