@@ -13,16 +13,14 @@ interface AnalyticsDashboardProps {
 
 export function AnalyticsDashboard({ siteId }: AnalyticsDashboardProps) {
   const [selectedVisit, setSelectedVisit] = useState<Visit | null>(null);
-  const [showJourney, setShowJourney] = useState(false);
-
   const { data: visits = [], isLoading: visitsLoading } = useQuery<Visit[]>({
     queryKey: [`/api/businesses/${siteId}/visits`],
     refetchInterval: 5000
   });
 
   const handleVisitClick = (visit: Visit) => {
-    setSelectedVisit(visit);
-    setShowJourney(true);
+    console.log('Visit clicked:', visit);
+    setSelectedVisit(selectedVisit?.id === visit.id ? null : visit);
   };
 
   const { data: analytics, isLoading: analyticsLoading } = useQuery({
@@ -114,14 +112,18 @@ export function AnalyticsDashboard({ siteId }: AnalyticsDashboardProps) {
           </CardContent>
         </Card>
 
-        {selectedVisit && analytics?.navigationPath && (
+        {selectedVisit && analytics && (
           <Card>
             <CardHeader>
-              <CardTitle>User Journey Analysis</CardTitle>
+              <CardTitle>User Journey Analysis for Visit {selectedVisit.id}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
                 <div>
+                  <h4 className="font-semibold mb-2">Visit Details</h4>
+                  <div className="text-sm text-gray-500 mb-4">
+                    Duration: {selectedVisit.duration}s • Source: {selectedVisit.source}
+                  </div>
                   <h4 className="font-semibold mb-2">Page Flow</h4>
                   <div className="space-y-2">
                     {Object.entries(pageTransitions).map(([page, data]) => (
