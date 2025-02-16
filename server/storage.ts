@@ -164,6 +164,20 @@ export class MemStorage implements IStorage {
   }
 
   async recordVisit(siteId: string, duration: number, source: string): Promise<Visit> {
+    const business = await this.getBusiness(siteId);
+    if (!business) throw new Error("Business not found");
+
+    // Only record visits that have a duration
+    if (duration === 0) {
+      return {
+        id: 0,
+        siteId,
+        timestamp: new Date(),
+        duration,
+        source
+      };
+    }
+
     const visit: Visit = {
       id: this.visitId++,
       siteId,
@@ -171,9 +185,6 @@ export class MemStorage implements IStorage {
       duration,
       source
     };
-
-    const business = await this.getBusiness(siteId);
-    if (!business) throw new Error("Business not found");
 
     const businessVisits = this.visits.get(business.id) || [];
     businessVisits.push(visit);

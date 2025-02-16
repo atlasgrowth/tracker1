@@ -13,11 +13,17 @@ interface AnalyticsDashboardProps {
 
 export function AnalyticsDashboard({ siteId }: AnalyticsDashboardProps) {
   const [selectedVisit, setSelectedVisit] = useState<Visit | null>(null);
+  const [showJourney, setShowJourney] = useState(false);
 
   const { data: visits = [], isLoading: visitsLoading } = useQuery<Visit[]>({
     queryKey: [`/api/businesses/${siteId}/visits`],
     refetchInterval: 5000
   });
+
+  const handleVisitClick = (visit: Visit) => {
+    setSelectedVisit(visit);
+    setShowJourney(true);
+  };
 
   const { data: analytics, isLoading: analyticsLoading } = useQuery({
     queryKey: [`/api/businesses/${siteId}/analytics`],
@@ -92,7 +98,7 @@ export function AnalyticsDashboard({ siteId }: AnalyticsDashboardProps) {
                   key={visit.id} 
                   variant={selectedVisit?.id === visit.id ? "secondary" : "ghost"}
                   className="w-full justify-between hover:bg-gray-100 transition-colors"
-                  onClick={() => setSelectedVisit(selectedVisit?.id === visit.id ? null : visit)}
+                  onClick={() => handleVisitClick(visit)}
                 >
                   <div className="text-left">
                     <div className="font-medium">
