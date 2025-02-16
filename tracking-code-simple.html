@@ -1,18 +1,64 @@
-<!-- Add this right before your closing </body> tag -->
-<script>
-  // Get the business ID from URL parameters
-  const urlParams = new URLSearchParams(window.location.search);
-  const siteId = urlParams.get('site_id');
 
-  if (siteId) {
-    // Send visit data when page loads
-    fetch('https://bbd5027a-f3b6-48cb-b2e3-7c31fdf9c394-00-1a4b9g7vepksy.janeway.replit.dev/api/businesses/' + siteId + '/visits', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        duration: 0,
-        source: document.referrer || 'direct'
-      })
-    }).catch(e => console.error('Failed to send visit:', e));
-  }
-</script>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+
+    <!-- Tracking Code -->
+    <script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const siteId = urlParams.get('site_id');
+
+      if (siteId) {
+        // Record initial visit immediately
+        fetch('https://e1ad1fcb-e0d6-4975-9d66-21666cc89433-00-edqcrzbbmbuj.riker.replit.dev/api/businesses/' + siteId + '/visits', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            duration: 0,
+            source: document.referrer || 'direct'
+          })
+        });
+
+        const SESSION = {
+          siteId: siteId,
+          startTime: Date.now(),
+          pageViews: [{
+            path: window.location.pathname + window.location.search,
+            timestamp: Date.now(),
+            deviceInfo: {
+              browser: navigator.userAgent,
+              os: navigator.platform,
+              screenSize: { width: window.screen.width, height: window.screen.height }
+            }
+          }]
+        };
+
+        // Use navigator.sendBeacon for more reliable data sending on page unload
+        window.addEventListener('beforeunload', () => {
+          const duration = Math.round((Date.now() - SESSION.startTime) / 1000);
+          
+          // Send visit duration
+          navigator.sendBeacon(
+            'https://e1ad1fcb-e0d6-4975-9d66-21666cc89433-00-edqcrzbbmbuj.riker.replit.dev/api/businesses/' + siteId + '/visits',
+            JSON.stringify({
+              duration: duration,
+              source: document.referrer || 'direct'
+            })
+          );
+
+          // Send analytics data
+          navigator.sendBeacon(
+            'https://e1ad1fcb-e0d6-4975-9d66-21666cc89433-00-edqcrzbbmbuj.riker.replit.dev/api/businesses/' + siteId + '/analytics',
+            JSON.stringify(SESSION)
+          );
+        });
+      }
+    </script>
+  </body>
+</html>
