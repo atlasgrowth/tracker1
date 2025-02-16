@@ -203,6 +203,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get analytics
+  // GHL Integration Routes
+  app.get("/api/ghl/templates", async (req, res) => {
+    try {
+      const templates = await getTemplates();
+      res.json(templates);
+    } catch (error) {
+      console.error("Error fetching templates:", error);
+      res.status(500).json({ message: "Failed to fetch templates" });
+    }
+  });
+
+  app.get("/api/ghl/contacts", async (req, res) => {
+    try {
+      const contacts = await getContacts();
+      res.json(contacts);
+    } catch (error) {
+      console.error("Error fetching contacts:", error);
+      res.status(500).json({ message: "Failed to fetch contacts" });
+    }
+  });
+
+  app.post("/api/ghl/send-campaign", async (req, res) => {
+    try {
+      const { templateId, subject, body } = req.body;
+      const result = await sendCampaign(templateId, subject, body);
+      res.json(result);
+    } catch (error) {
+      console.error("Error sending campaign:", error);
+      res.status(500).json({ message: "Failed to send campaign" });
+    }
+  });
+
   app.get("/api/businesses/:siteId/analytics", async (req, res) => {
     try {
       const analyticsDir = join(process.cwd(), "analytics");
