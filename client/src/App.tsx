@@ -5,6 +5,8 @@ import { Toaster } from "@/components/ui/toaster";
 import NotFound from "@/pages/not-found";
 import Dashboard from "@/pages/dashboard";
 import BusinessDetails from "@/pages/business-details";
+import Home from "@/pages/home";
+import EmailDashboard from "@/pages/email";
 
 function Router() {
   return (
