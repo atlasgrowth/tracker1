@@ -9,7 +9,9 @@ import BusinessDetails from "@/pages/business-details";
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={Dashboard} />
+      <Route path="/" component={Home} />
+      <Route path="/pipeline" component={Dashboard} />
+      <Route path="/email" component={EmailDashboard} />
       <Route path="/business/:siteId" component={BusinessDetails} />
       <Route component={NotFound} />
     </Switch>
