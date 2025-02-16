@@ -178,8 +178,8 @@ export class MemStorage implements IStorage {
     this.visits.set(business.id, businessVisits);
 
     // Update business visit stats and pipeline stage 
-    const business = await this.getBusiness(siteId);
-    if (business) {
+    business.lastViewed = visit.timestamp;
+    business.totalViews = (business.totalViews || 0) + 1;
       business.lastViewed = visit.timestamp;
       business.totalViews = (business.totalViews || 0) + 1;
 
