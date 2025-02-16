@@ -91,8 +91,8 @@ export function AnalyticsDashboard({ siteId }: AnalyticsDashboardProps) {
                 <Button 
                   key={visit.id} 
                   variant={selectedVisit?.id === visit.id ? "secondary" : "ghost"}
-                  className="w-full justify-between"
-                  onClick={() => setSelectedVisit(visit)}
+                  className="w-full justify-between hover:bg-gray-100 transition-colors"
+                  onClick={() => setSelectedVisit(selectedVisit?.id === visit.id ? null : visit)}
                 >
                   <div className="text-left">
                     <div className="font-medium">
