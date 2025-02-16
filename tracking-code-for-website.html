@@ -85,7 +85,20 @@
       const PIPELINE_URL = 'https://bbd5027a-f3b6-48cb-b2e3-7c31fdf9c394-00-1a4b9g7vepksy.janeway.replit.dev';
 
       try {
-        // Send visit data and update pipeline stage
+        // First, immediately update pipeline stage to "website_viewed"
+        await fetch(`${PIPELINE_URL}/api/businesses/${siteId}/stage`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            stage: 'website_viewed'
+          }),
+          mode: 'cors'
+        });
+
+        // Then send visit data
         await fetch(`${PIPELINE_URL}/api/businesses/${siteId}/visits`, {
           method: 'POST',
           headers: { 
@@ -99,7 +112,7 @@
           mode: 'cors'
         });
 
-        // Send analytics data
+        // Finally send analytics data
         await fetch(`${PIPELINE_URL}/api/businesses/${siteId}/analytics`, {
           method: 'POST',
           headers: { 
@@ -114,10 +127,13 @@
       }
     }
 
-    // Start tracking
+    // Start tracking immediately
     recordPageView();
 
-    // Send analytics every 30 seconds
+    // Send initial analytics to update pipeline stage
+    sendAnalytics();
+
+    // Continue sending analytics periodically
     setInterval(sendAnalytics, 30000);
   }
 </script>
