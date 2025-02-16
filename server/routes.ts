@@ -3,6 +3,52 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertBusinessSchema, PIPELINE_STAGES } from "@shared/schema";
 import { z } from "zod";
+import { join } from "path";
+import { promises as fs } from "fs";
+
+const deviceInfoSchema = z.object({
+  browser: z.string(),
+  os: z.string(),
+  screenSize: z.object({
+    width: z.number(),
+    height: z.number()
+  })
+});
+
+const locationInfoSchema = z.object({
+  country: z.string(),
+  region: z.string()
+});
+
+const pageViewSchema = z.object({
+  path: z.string(),
+  timestamp: z.number(),
+  timeSpent: z.number(),
+  scrollDepth: z.number(),
+  deviceInfo: deviceInfoSchema,
+  location: locationInfoSchema
+});
+
+const clickEventSchema = z.object({
+  path: z.string(),
+  timestamp: z.number(),
+  elementId: z.string(),
+  elementText: z.string(),
+  position: z.object({
+    x: z.number(),
+    y: z.number()
+  })
+});
+
+const sessionSchema = z.object({
+  siteId: z.string(),
+  startTime: z.number(),
+  lastActive: z.number(),
+  deviceInfo: deviceInfoSchema,
+  pageViews: z.array(pageViewSchema),
+  clicks: z.array(clickEventSchema),
+  navigationPath: z.array(z.string())
+});
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // Get all businesses
@@ -108,6 +154,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error('Error fetching visits:', error);
       res.status(500).json({ message: "Failed to fetch visits" });
+    }
+  });
+
+  app.post("/api/businesses/:siteId/analytics", async (req, res) => {
+    try {
+      const result = sessionSchema.safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).json({ errors: result.error.errors });
+      }
+
+      const session = result.data;
+      const siteId = req.params.siteId;
+
+      // Ensure analytics directory exists
+      const analyticsDir = join(process.cwd(), "analytics");
+      await fs.mkdir(analyticsDir, { recursive: true });
+
+      // Write session data to a file
+      const filename = `analytics_${siteId}_${Date.now()}.json`;
+      await fs.writeFile(
+        join(analyticsDir, filename),
+        JSON.stringify(session) + "\n"
+      );
+
+      res.status(201).json({ message: "Analytics recorded successfully" });
+    } catch (error) {
+      console.error("Error saving analytics:", error);
+      res.status(500).json({ message: "Failed to save analytics" });
     }
   });
 
