@@ -161,7 +161,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const visit = await storage.recordVisit(
-        business.id,
+        req.params.siteId,
         result.data.duration,
         result.data.source
       );

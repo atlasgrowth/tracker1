@@ -11,7 +11,7 @@ export interface IStorage {
   updateBusinessNotes(siteId: string, notes: string): Promise<Business>;
 
   // Visit operations
-  recordVisit(businessId: number, duration: number, source: string): Promise<Visit>;
+  recordVisit(siteId: string, duration: number, source: string): Promise<Visit>;
   getVisits(businessId: number): Promise<Visit[]>;
 }
 
