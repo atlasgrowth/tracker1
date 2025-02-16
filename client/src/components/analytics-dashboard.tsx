@@ -1,17 +1,17 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import type { Visit } from "@shared/schema";
 import { formatDistance } from "date-fns";
 
 interface AnalyticsDashboardProps {
-  businessId: number;
   siteId: string;
 }
 
-export function AnalyticsDashboard({ businessId, siteId }: AnalyticsDashboardProps) {
+export function AnalyticsDashboard({ siteId }: AnalyticsDashboardProps) {
   const { data: visits = [], isLoading: visitsLoading } = useQuery<Visit[]>({
-    queryKey: [`/api/businesses/${siteId}/visits`]
+    queryKey: [`/api/businesses/${siteId}/visits`],
+    refetchInterval: 5000 // Refresh every 5 seconds
   });
 
   const { data: analytics, isLoading: analyticsLoading } = useQuery({
@@ -20,28 +20,31 @@ export function AnalyticsDashboard({ businessId, siteId }: AnalyticsDashboardPro
       const resp = await fetch(`/api/businesses/${siteId}/analytics`);
       if (!resp.ok) throw new Error('Failed to fetch analytics');
       return resp.json();
-    }
+    },
+    refetchInterval: 10000 // Refresh every 10 seconds
   });
 
   if (visitsLoading || analyticsLoading) {
     return <div>Loading analytics...</div>;
   }
 
-  const visitsByDay = visits.reduce((acc, visit) => {
-    const date = new Date(visit.timestamp).toISOString().split('T')[0];
-    if (!acc[date]) acc[date] = [];
-    acc[date].push(visit);
-    return acc;
-  }, {} as Record<string, Visit[]>);
-
-  const chartData = Object.entries(visitsByDay).map(([date, dayVisits]) => ({
-    date,
-    visits: dayVisits.length,
-    avgDuration: Math.round(dayVisits.reduce((sum, v) => sum + (v.duration || 0), 0) / dayVisits.length)
-  }));
-
+  // Calculate metrics
   const totalVisits = visits.length;
-  const avgDuration = Math.round(visits.reduce((sum, v) => sum + (v.duration || 0), 0) / (visits.length || 1));
+  const avgDuration = Math.round(
+    visits.reduce((sum, v) => sum + (v.duration || 0), 0) / (visits.length || 1)
+  );
+
+  // Group visits by hour for the timeline
+  const visitsByHour = visits.reduce((acc, visit) => {
+    const hour = new Date(visit.timestamp).getHours();
+    acc[hour] = (acc[hour] || 0) + 1;
+    return acc;
+  }, {} as Record<number, number>);
+
+  const timelineData = Object.entries(visitsByHour).map(([hour, count]) => ({
+    hour: `${hour}:00`,
+    visits: count
+  }));
 
   // Prepare devices data for pie chart
   const deviceData = analytics?.deviceStats?.browsers 
@@ -61,23 +64,23 @@ export function AnalyticsDashboard({ businessId, siteId }: AnalyticsDashboardPro
       <CardContent className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <Card>
-            <CardContent className="pt-6">
-              <div className="text-2xl font-bold">{totalVisits}</div>
-              <div className="text-sm text-gray-500">Total Visits</div>
+            <CardContent className="pt-6 text-3xl font-bold">
+              {totalVisits}
             </CardContent>
+            <div className="text-sm text-gray-500">Total Visits</div>
           </Card>
           <Card>
-            <CardContent className="pt-6">
-              <div className="text-2xl font-bold">{avgDuration}s</div>
-              <div className="text-sm text-gray-500">Average Visit Duration</div>
+            <CardContent className="pt-6 text-3xl font-bold">
+              {avgDuration}s
             </CardContent>
+            <div className="text-sm text-gray-500">Average Visit Duration</div>
           </Card>
           {analytics?.totalVisits && (
             <Card>
-              <CardContent className="pt-6">
-                <div className="text-2xl font-bold">{analytics.totalVisits}</div>
-                <div className="text-sm text-gray-500">Unique Sessions</div>
+              <CardContent className="pt-6 text-3xl font-bold">
+                {analytics.totalVisits}
               </CardContent>
+              <div className="text-sm text-gray-500">Unique Sessions</div>
             </Card>
           )}
         </div>
@@ -87,16 +90,14 @@ export function AnalyticsDashboard({ businessId, siteId }: AnalyticsDashboardPro
             <CardTitle>Visit Timeline</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-[300px]">
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={chartData}>
-                  <XAxis dataKey="date" />
-                  <YAxis />
-                  <Tooltip />
-                  <Line type="monotone" dataKey="visits" stroke="#3b82f6" />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={timelineData}>
+                <XAxis dataKey="hour" />
+                <YAxis />
+                <Tooltip />
+                <Line type="monotone" dataKey="visits" stroke="#8884d8" />
+              </LineChart>
+            </ResponsiveContainer>
           </CardContent>
         </Card>
 
@@ -106,25 +107,23 @@ export function AnalyticsDashboard({ businessId, siteId }: AnalyticsDashboardPro
               <CardTitle>Browser Distribution</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-[300px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={deviceData}
-                      innerRadius={60}
-                      outerRadius={100}
-                      paddingAngle={5}
-                      dataKey="value"
-                      label={({name, value}) => `${name}: ${value}`}
-                    >
-                      {deviceData.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip />
-                  </PieChart>
-                </ResponsiveContainer>
-              </div>
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={deviceData}
+                    innerRadius={60}
+                    outerRadius={100}
+                    paddingAngle={5}
+                    dataKey="value"
+                    label={({name, value}) => `${name}: ${value}`}
+                  >
+                    {deviceData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
             </CardContent>
           </Card>
         )}
