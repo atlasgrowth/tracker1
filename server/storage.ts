@@ -193,9 +193,8 @@ export class MemStorage implements IStorage {
       }
 
       this.businesses.set(business.siteId, business);
-    }
 
-    console.log(`Recorded visit for business ${businessId}, duration: ${duration}s, source: ${source}`);
+    console.log(`Recorded visit for business ${siteId}, duration: ${duration}s, source: ${source}`);
     return visit;
   }
 
