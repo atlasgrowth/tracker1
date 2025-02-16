@@ -1,4 +1,16 @@
-<!-- Add this right before the closing </body> tag -->
+<!-- Here's the tracking code for your website. Follow these steps:
+
+1. Copy this entire script
+2. Add it to your website right before the closing </body> tag
+3. Add ?site_id=YOUR_BUSINESS_ID to your website URLs
+   Example: yoursite.com?site_id=1stcallplumbing or yoursite.com/page?site_id=1stcallplumbing
+
+This code will:
+- Track page views and time spent on each page
+- Track scroll depth and clicks
+- Send analytics data to your pipeline application
+- Update the pipeline stage to "website_viewed"
+-->
 <script>
   // Get the business ID from URL parameters
   const urlParams = new URLSearchParams(window.location.search);
@@ -82,6 +94,7 @@
 
     // Send analytics data
     async function sendAnalytics() {
+      // This should be the URL of your pipeline application
       const PIPELINE_URL = 'https://bbd5027a-f3b6-48cb-b2e3-7c31fdf9c394-00-1a4b9g7vepksy.janeway.replit.dev';
 
       try {
@@ -96,7 +109,7 @@
             duration: Math.round((Date.now() - SESSION.startTime) / 1000),
             source: document.referrer || 'direct'
           }),
-          mode: 'cors'
+          mode: 'cors' // Enable CORS
         });
 
         // Send detailed analytics data
@@ -107,7 +120,7 @@
             'Accept': 'application/json'
           },
           body: JSON.stringify(SESSION),
-          mode: 'cors'
+          mode: 'cors' // Enable CORS
         });
       } catch (e) {
         console.error('Failed to send analytics:', e);

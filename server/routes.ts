@@ -6,6 +6,7 @@ import { z } from "zod";
 import { join } from "path";
 import { promises as fs } from "fs";
 
+// Schemas for validating analytics data
 const deviceInfoSchema = z.object({
   browser: z.string(),
   os: z.string(),
@@ -45,12 +46,24 @@ const sessionSchema = z.object({
   startTime: z.number(),
   lastActive: z.number(),
   deviceInfo: deviceInfoSchema,
+  locationInfo: locationInfoSchema,
   pageViews: z.array(pageViewSchema),
   clicks: z.array(clickEventSchema),
   navigationPath: z.array(z.string())
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Enable CORS for all routes
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Accept');
+    if (req.method === 'OPTIONS') {
+      return res.sendStatus(204);
+    }
+    next();
+  });
+
   // Get all businesses
   app.get("/api/businesses", async (req, res) => {
     const businesses = await storage.getBusinesses();
@@ -112,21 +125,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Get business visits
-  app.get("/api/businesses/:siteId/visits", async (req, res) => {
-    try {
-      const business = await storage.getBusiness(req.params.siteId);
-      if (!business) {
-        return res.status(404).json({ message: "Business not found" });
-      }
-      const visits = await storage.getVisits(business.id);
-      res.json(visits);
-    } catch (error) {
-      console.error('Error fetching visits:', error);
-      res.status(500).json({ message: "Failed to fetch visits" });
-    }
-  });
-
   // Record visit
   app.post("/api/businesses/:siteId/visits", async (req, res) => {
     const schema = z.object({
@@ -151,7 +149,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const visit = await storage.recordVisit(
-        business.id,
+        parseInt(business.id.toString(), 10), // Convert string to number
         result.data.duration,
         result.data.source
       );
@@ -162,6 +160,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Record analytics
   app.post("/api/businesses/:siteId/analytics", async (req, res) => {
     try {
       const result = sessionSchema.safeParse(req.body);
