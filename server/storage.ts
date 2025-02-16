@@ -181,9 +181,12 @@ export class MemStorage implements IStorage {
       business.totalViews = (business.totalViews || 0) + 1;
 
       // Update pipeline stage to website_viewed if it's in an earlier stage
+      console.log(`Current pipeline stage for ${business.name}: ${business.pipelineStage}`);
       if (business.pipelineStage === "website_created" || business.pipelineStage === "website_sent") {
         business.pipelineStage = "website_viewed";
         console.log(`Updated pipeline stage to website_viewed for business ${business.name}`);
+      } else {
+        console.log(`No stage update needed for ${business.name} (current stage: ${business.pipelineStage})`);
       }
 
       this.businesses.set(business.siteId, business);
