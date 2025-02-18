@@ -30,7 +30,7 @@ export function AnalyticsDashboard({ siteId }: AnalyticsDashboardProps) {
       if (!resp.ok) throw new Error('Failed to fetch analytics');
       return resp.json();
     },
-    refetchInterval: 10000
+    refetchInterval: 5000
   });
 
   if (visitsLoading || analyticsLoading) {
