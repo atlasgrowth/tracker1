@@ -45,7 +45,7 @@ export function BusinessList({ businesses }: BusinessListProps) {
                           {business.phone}
                         </a>
                         <a 
-                          href={`sms:${business.phone}`}
+                          href={`sms:${business.phone}${business.introduction ? `?&body=${encodeURIComponent(business.introduction)}` : ''}`}
                           onClick={(e) => e.stopPropagation()}
                           className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded hover:bg-blue-200"
                         >
