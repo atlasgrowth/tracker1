@@ -3,12 +3,12 @@
   "version": 2,
   "builds": [
     {
-      "src": "server/index.ts",
-      "use": "@vercel/node"
-    },
-    {
       "src": "client/*",
       "use": "@vercel/static"
+    },
+    {
+      "src": "server/index.ts",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
@@ -18,7 +18,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "client/$1"
+      "dest": "/client/dist/$1"
     }
   ]
 }
