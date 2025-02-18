@@ -1,0 +1,91 @@
+[
+  {
+    "error": "no_reviews",
+    "errorDescription": "Did not find any reviews for place \"Luyet Plumbing Co.\" (ID: ChIJwT1ckb2D0ocRT89CQb1cRZM)",
+    "searchString": "Direct Detail URL: https://www.google.com/maps/search/?api=1&query=ChIJwT1ckb2D0ocRT89CQb1cRZM&query_place_id=ChIJwT1ckb2D0ocRT89CQb1cRZM",
+    "isAdvertisement": false,
+    "placeId": "ChIJwT1ckb2D0ocRT89CQb1cRZM",
+    "location": {
+      "lat": 35.105692,
+      "lng": -92.3553935
+    },
+    "address": null,
+    "categoryName": "Plumber",
+    "categories": [
+      "Plumber",
+      "Service establishment"
+    ],
+    "title": "Luyet Plumbing Co.",
+    "totalScore": 5,
+    "permanentlyClosed": false,
+    "temporarilyClosed": false,
+    "reviewsCount": 4,
+    "url": "https://www.google.com/maps/search/?api=1&query=Luyet%20Plumbing%20Co.&query_place_id=ChIJwT1ckb2D0ocRT89CQb1cRZM",
+    "price": null,
+    "cid": "10611990064881913679",
+    "fid": "0x87d283bd915c3dc1:0x93455cbd4142cf4f"
+  },
+  {
+    "error": "no_reviews",
+    "errorDescription": "Did not find any reviews for place \"Southern Quality Home Inspections LLC\" (ID: ChIJQaXjGj2lJwQR6dRJhq0D3Z4)",
+    "searchString": "Direct Detail URL: https://www.google.com/maps/search/?api=1&query=ChIJQaXjGj2lJwQR6dRJhq0D3Z4&query_place_id=ChIJQaXjGj2lJwQR6dRJhq0D3Z4",
+    "isAdvertisement": false,
+    "placeId": "ChIJQaXjGj2lJwQR6dRJhq0D3Z4",
+    "location": {
+      "lat": 34.7520156,
+      "lng": -92.129428
+    },
+    "address": null,
+    "categoryName": "Home inspector",
+    "categories": [
+      "Home inspector",
+      "Service establishment"
+    ],
+    "title": "Southern Quality Home Inspections LLC",
+    "totalScore": 5,
+    "permanentlyClosed": false,
+    "temporarilyClosed": false,
+    "reviewsCount": 10,
+    "url": "https://www.google.com/maps/search/?api=1&query=Southern%20Quality%20Home%20Inspections%20LLC&query_place_id=ChIJQaXjGj2lJwQR6dRJhq0D3Z4",
+    "price": null,
+    "cid": "11447309871662879977",
+    "fid": "0x427a53d1ae3a541:0x9edd03ad8649d4e9",
+    "imageUrl": "https://lh5.googleusercontent.com/p/AF1QipPto_s6c7gOL4svc--XebgWjUsvwwa36agkgHMm=w425-h240-k-no"
+  },
+  {
+    "error": "no_reviews",
+    "errorDescription": "Did not find any reviews for place \"Josh Wilburn Plumbing, LLC\" (ID: ChIJfSQZZc_XzIcRByXoB_a8M3U)",
+    "searchString": "Direct Detail URL: https://www.google.com/maps/search/?api=1&query=ChIJfSQZZc_XzIcRByXoB_a8M3U&query_place_id=ChIJfSQZZc_XzIcRByXoB_a8M3U",
+    "isAdvertisement": false,
+    "placeId": "ChIJfSQZZc_XzIcRByXoB_a8M3U",
+    "location": {
+      "lat": 34.6051037,
+      "lng": -93.1096665
+    },
+    "address": "166 E Half Moon Ct, Mountain Pine, AR 71956",
+    "neighborhood": null,
+    "street": "166 E Half Moon Ct",
+    "city": "Mountain Pine",
+    "postalCode": "71956",
+    "state": "Arkansas",
+    "countryCode": "US",
+    "categoryName": "Plumber",
+    "categories": [
+      "Plumber"
+    ],
+    "title": "Josh Wilburn Plumbing, LLC",
+    "totalScore": 5,
+    "permanentlyClosed": false,
+    "temporarilyClosed": false,
+    "reviewsCount": 5,
+    "url": "https://www.google.com/maps/search/?api=1&query=Josh%20Wilburn%20Plumbing%2C%20LLC&query_place_id=ChIJfSQZZc_XzIcRByXoB_a8M3U",
+    "price": null,
+    "cid": "8445301491130443015",
+    "fid": "0x87ccd7cf6519247d:0x7533bcf607e82507",
+    "imageUrl": "https://lh5.googleusercontent.com/p/AF1QipOlvOWSFezK4r_eW3Sg2QflY2ANPmzrhEIKH9qR=w408-h408-k-no"
+  },
+  {
+    "error": "no_search_results",
+    "errorDescription": "No places found"
+  }
+]

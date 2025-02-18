@@ -1,67 +1,116 @@
-
 import json
 import spacy
-from collections import OrderedDict
+from collections import OrderedDict, Counter
+import sys
+import re
 
-def extract_names_from_text(text, nlp):
+# A set of words we want to ignore from the PERSON candidates.
+IGNORE_WORDS = {
+    "Problem", "AR", "Highly", "Barkley", "Drainpro", "Superb", "Crew",
+    "Call", "Likes", "Jack", "hammering", "Plumber", "The", "and", "of"
+}
+
+def load_reviews(filename):
+    """Load reviews from the JSON file."""
+    try:
+        with open(filename, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except Exception as e:
+        print(f"Error loading file: {e}")
+        sys.exit(1)
+
+def group_reviews_by_place(reviews):
+    """
+    Group reviews by place_id (or business_name if place_id is missing).
+    Use an OrderedDict to preserve the order of first appearance.
+    """
+    groups = OrderedDict()
+    for review in reviews:
+        key = review.get("place_id") or review.get("business_name") or "unknown"
+        if key not in groups:
+            groups[key] = {
+                "business_name": review.get("business_name", "unknown"),
+                "reviews": []
+            }
+        groups[key]["reviews"].append(review)
+    return groups
+
+def clean_candidate(name):
+    """
+    Clean up candidate names by stripping extra punctuation and whitespace.
+    Also remove if the name matches an ignore word (case-insensitive).
+    """
+    # Remove extra punctuation from the beginning or end.
+    candidate = re.sub(r"^[^\w]+|[^\w]+$", "", name.strip())
+    # If candidate (lowercase) is in the ignore list, return None.
+    if candidate.lower() in {w.lower() for w in IGNORE_WORDS}:
+        return None
+    return candidate
+
+def extract_person_names(text, nlp):
+    """
+    Process text using spaCy and return a list of cleaned PERSON entities.
+    """
     doc = nlp(text)
     names = []
     for ent in doc.ents:
         if ent.label_ == "PERSON":
-            name = ent.text.strip()
-            if len(name) > 1 and name.replace("'", "").isalpha():
-                names.append(name)
+            candidate = clean_candidate(ent.text)
+            if candidate and len(candidate) > 1:
+                names.append(candidate)
     return names
 
+def guess_owner_for_group(reviews, nlp, min_frequency=2):
+    """
+    For a list of reviews (belonging to the same business),
+    extract person names from non-empty review texts,
+    count frequencies, and return the most common candidate if it appears
+    at least min_frequency times. Otherwise, return "No owner found".
+    """
+    name_counter = Counter()
+    for review in reviews:
+        text = review.get("text")
+        if text and text.strip():
+            names = extract_person_names(text, nlp)
+            name_counter.update(names)
+    if name_counter:
+        most_common, count = name_counter.most_common(1)[0]
+        # Only return the candidate if it meets the frequency threshold.
+        if count >= min_frequency:
+            return most_common, dict(name_counter)
+    return "No owner found", dict(name_counter)
+
 def main():
-    try:
-        # Load the spaCy English model
-        nlp = spacy.load("en_core_web_sm")
-        
-        # Get original place IDs order from raw input
-        raw_input = "ChIJJUc7qlIm1IcRx-cCCiI_yP0ChIJvyeTdRotvG8RkmIklJ97REQChIJ-whw30ec1ocRV6TF2A7qwmkChIJH1S2OdEr1IcRXxOY6as7lZgChIJT71U02aC1ocRebpED6PNcWEChIJs7AAYjsp1IcRd1qa1OgBeksChIJlfq9EDop1IcRyLTYZdiMl-kChIJ583lFvgr1IcR9RH9RZkUnxgChIJB-SmCwN91ocRDZkEqljH12cChIJNyZXsmBpW2YRLcv2JrAFnWUChIJjy8EKfM7X6cRjVVNorsmQT0ChIJEzJ4v1mA1ocRaY-rj8LgkBYChIJRYEyeFD-3CgRuU12zJNPrRYChIJFbjK3kEo1IcRtoCLhZFVyI4ChIJ8ygZxqaC1GURwDKLlfobyrMChIJC5JUq2hp1ocR8zmk7hNY6PoChIJgVQfYY9_1ocRLin9D9fv-nEChIJi4da6Vwp1IcR0bX5offer6gChIJ86k1UoPO1YcRfh3x4zkV1eoChIJNfLI22Ap1IcREiWBHhglr44ChIJv3qsZM8MO2gRMMNRgRfAvlsChIJg4gvel8-0YcRp-QbpDeFWWUChIJIawW7VXH1ocR1UrE4k0sKJIChIJPX-L90lBiogR3QgpY7cHZpoChIJYRUpb5Ko1YcRdMcRIX--CDsChIJq99fieBW0YcRMO9dP-NJRkAChIJ3z7lV_BW0YcRonmFlkE1SCIChIJh2MXfjaVZqwR8p8ljb7FEh4ChIJtwAIRs9Z1IcRXNsh3UrjUO8ChIJCTK1eVof1ocR4bXheNQUGlQChIJB-kFGerFNSsRyAHhrpnPYxwChIJ82Ep3z8nq6YRbhwClcPYwMAChIJXWV4VEXv0ocR_8n1NKHfJFUChIJv2MMMNlUzYcRMfKtJcqV2fIChIJ4fjTltLrM4YRCloQzpx1NDgChIJIxGltkcTZYkR1CN3FFW0MAoChIJoV1V4U-lyYcRywnjX7r2w5kChIJMzMR5v770ocRH73Tz3HiFYoChIJYdrmfl0aMoYR5DR1oqIRBGIChIJN5VGPlD_LYYR7Ou8OYLzgowChIJ1QAIfhIYMoYRs05ObsRz8a8ChIJnes2Ye5hMYYR3NO_7GDpDhcChIJ7YwD1rwSnYcRzLVIcA90rh8ChIJJR6S1DgDM4YRZUTM-gAm8EoChIJf896jKtxMoYR_f3QBtorbqAChIJt2CWiD6jLYYRMlcJZFlpdOoChIJjZ5EJsN7LYYR1TJFmYyXxLIChIJ97NraeNgM4YRMjcopSkIr4sChIJrehgvxROzYcR-YCz3kwduQM"
-        place_ids = ["ChIJ" + part for part in raw_input.split("ChIJ") if part]
+    nlp = spacy.load("en_core_web_sm")
+    filename = "enhanced_reviews.json"
+    reviews = load_reviews(filename)
 
-        # Load reviews from the JSON file
-        with open("reviews_by_business.json", "r", encoding="utf-8") as f:
-            reviews_data = json.load(f)
+    groups = group_reviews_by_place(reviews)
 
-        # Process each place ID in order
-        print("\nPotential owner names by place ID (in original input order):")
-        for place_id in place_ids:
-            print(f"\nPlace ID: {place_id}")
-            found = False
-            
-            # Find matching business and process its reviews
-            for business_key, reviews in reviews_data.items():
-                if place_id in business_key:
-                    found = True
-                    business_name = business_key.split(" (")[0]
-                    print(f"Business: {business_name}")
-                    
-                    # Process reviews to find names
-                    names_found = set()
-                    for review in reviews:
-                        text = review.get("text", "")
-                        if text:
-                            names = extract_names_from_text(text, nlp)
-                            names_found.update(names)
-                    
-                    if names_found:
-                        print("Names mentioned:")
-                        for name in names_found:
-                            print(f"- {name}")
-                    else:
-                        print("No names found in reviews")
-                    break
-            
-            if not found:
-                print("None - No reviews found for this place ID")
+    results = []
+    for place_id, data in groups.items():
+        business = data["business_name"]
+        reviews_list = data["reviews"]
+        guessed_name, counts = guess_owner_for_group(reviews_list, nlp, min_frequency=2)
+        results.append({
+            "place_id": place_id,
+            "business_name": business,
+            "guessed_owner": guessed_name,
+            "name_counts": counts
+        })
 
-    except FileNotFoundError:
-        print("Error: reviews_by_business.json file not found")
-    except Exception as e:
-        print(f"Error: {str(e)}")
+    # Print out the results in original order.
+    print("Guessed owner names by place (in original order):")
+    for res in results:
+        print(f"Place ID: {res['place_id']}")
+        print(f"  Business: {res['business_name']}")
+        print(f"  Guessed Owner: {res['guessed_owner']}")
+        print(f"  Candidate Counts: {res['name_counts']}")
+        print("-" * 40)
+
+    # Optionally, save the results to a JSON file for later comparison.
+    with open("guessed_owners.json", "w", encoding="utf-8") as outfile:
+        json.dump(results, outfile, indent=2)
 
 if __name__ == '__main__':
     main()
