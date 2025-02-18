@@ -176,6 +176,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Record analytics
   app.post("/api/businesses/:siteId/analytics", async (req, res) => {
     try {
+      console.log(`Received analytics from ${req.params.siteId} at ${new Date().toLocaleString()}`);
       const result = sessionSchema.safeParse(req.body);
       if (!result.success) {
         return res.status(400).json({ errors: result.error.errors });
