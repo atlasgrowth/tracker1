@@ -19,10 +19,17 @@ export function BusinessList({ businesses }: BusinessListProps) {
                   <div className="flex items-center gap-2">
                     <Building2 className="h-4 w-4 text-gray-500" />
                     <h3 className="font-medium">{business.name}</h3>
+                    {business.region && (
+                      <span className="text-xs bg-gray-100 px-2 py-1 rounded">
+                        {business.region}
+                      </span>
+                    )}
                   </div>
                   <div className="text-sm text-gray-500 space-y-1">
                     {business.ownerName && (
-                      <div>Owner: {business.ownerName}</div>
+                      <div className="flex items-center gap-1">
+                        <span className="font-medium">Owner:</span> {business.ownerName}
+                      </div>
                     )}
                     {business.city && (
                       <div>{business.city}</div>
@@ -36,6 +43,13 @@ export function BusinessList({ businesses }: BusinessListProps) {
                           className="text-blue-600 hover:underline"
                         >
                           {business.phone}
+                        </a>
+                        <a 
+                          href={`sms:${business.phone}`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded hover:bg-blue-200"
+                        >
+                          Text
                         </a>
                       </div>
                     )}

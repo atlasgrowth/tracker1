@@ -109,7 +109,7 @@ export class MemStorage implements IStorage {
             id,
             siteId,
             name: business.name,
-            placeId: business.place_id,
+            placeId: business.place_id || '',
             rating: business.rating ?? null,
             totalReviews: business.total_reviews ?? null,
             hasWebsite: business.has_website ?? false,
@@ -119,10 +119,12 @@ export class MemStorage implements IStorage {
             lastViewed: null,
             totalViews: 0,
             notes: null,
-            region: region.id, // Add region information
-            metadata: {
-              scores: business.scores ?? { photo_score: 0, facebook_score: 0 }
-            }
+            ownerName: business.owner_name || null,
+            introduction: business.introduction || null,
+            phone: business.phone || null,
+            reviewLink: business.review_link || null,
+            region: region.id,
+            metadata: {}
           };
           this.businesses.set(siteId, newBusiness);
         });
