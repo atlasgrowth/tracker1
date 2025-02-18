@@ -1,7 +1,17 @@
 
 import json
 import spacy
-from collections import Counter, OrderedDict
+from collections import OrderedDict
+
+def extract_names_from_text(text, nlp):
+    doc = nlp(text)
+    names = []
+    for ent in doc.ents:
+        if ent.label_ == "PERSON":
+            name = ent.text.strip()
+            if len(name) > 1 and name.replace("'", "").isalpha():
+                names.append(name)
+    return names
 
 def main():
     try:
@@ -16,48 +26,40 @@ def main():
         with open("reviews_by_business.json", "r", encoding="utf-8") as f:
             reviews_data = json.load(f)
 
-        # Create ordered dictionary to store results in input order
-        ordered_reviews = OrderedDict()
-        
-        # First populate with "None" for all place IDs
+        # Process each place ID in order
+        print("\nPotential owner names by place ID (in original input order):")
         for place_id in place_ids:
-            ordered_reviews[place_id] = None
-            
-        # Then fill in actual reviews where they exist
-        for business_key, reviews in reviews_data.items():
-            place_id = business_key.split("(")[1].rstrip(")")  # Extract place ID from key
-            if place_id in ordered_reviews:
-                ordered_reviews[place_id] = reviews
-            
-        name_counter = Counter()
-        
-        # Iterate through the business reviews
-        for business_name, reviews in reviews_data.items():
-            for review in reviews:
-                text = review.get("text", "")
-                if text:
-                    doc = nlp(text)
-                    for ent in doc.ents:
-                        if ent.label_ == "PERSON":
-                            name = ent.text.strip()
-                            if len(name) > 1 and name.replace("'", "").isalpha():
-                                name_counter[name] += 1
-
-        # Print results in order
-        print("\nReviews by place ID in original input order:")
-        for place_id, reviews in ordered_reviews.items():
             print(f"\nPlace ID: {place_id}")
-            if reviews is None:
+            found = False
+            
+            # Find matching business and process its reviews
+            for business_key, reviews in reviews_data.items():
+                if place_id in business_key:
+                    found = True
+                    business_name = business_key.split(" (")[0]
+                    print(f"Business: {business_name}")
+                    
+                    # Process reviews to find names
+                    names_found = set()
+                    for review in reviews:
+                        text = review.get("text", "")
+                        if text:
+                            names = extract_names_from_text(text, nlp)
+                            names_found.update(names)
+                    
+                    if names_found:
+                        print("Names mentioned:")
+                        for name in names_found:
+                            print(f"- {name}")
+                    else:
+                        print("No names found in reviews")
+                    break
+            
+            if not found:
                 print("None - No reviews found for this place ID")
-            else:
-                print(f"Found {len(reviews)} reviews:")
-                for review in reviews[:3]:  # Show first 3 reviews as sample
-                    print(f"- {review.get('reviewer_name', 'Anonymous')}: {review.get('stars', 0)} stars")
 
     except FileNotFoundError:
         print("Error: reviews_by_business.json file not found")
-    except json.JSONDecodeError:
-        print("Error: Invalid JSON format in reviews_by_business.json")
     except Exception as e:
         print(f"Error: {str(e)}")
 
