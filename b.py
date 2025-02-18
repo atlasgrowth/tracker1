@@ -411,7 +411,7 @@ def scrape_all_reviews():
             if i + batch_size < len(place_ids):
                 delay = 10  # 10 seconds between batches
                 print(f"Waiting {delay} seconds before next batch...")
-                time.sleep(delay))
+                time.sleep(delay)
 
         except requests.exceptions.RequestException as e:
             print(f"Error processing batch: {e}")
