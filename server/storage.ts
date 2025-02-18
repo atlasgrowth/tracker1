@@ -51,15 +51,14 @@ export class MemStorage implements IStorage {
     this.visitId = 1;
 
     // Load initial data from metadata file
-    this.initializeBusinesses().catch(error => {
+    this.initialize().catch(error => {
       console.error('Failed to initialize businesses:', error);
       process.exit(1); // Exit if we can't load the businesses
     });
   }
 
-  private async loadMetadataFromFile(): Promise<MetadataBusinesses> {
+  private async loadMetadataFromFile(url: string): Promise<MetadataBusinesses> {
     try {
-      const url = 'https://raw.githubusercontent.com/atlasgrowth/Arkansasplumbers/main/data/processed/metadata.json';
       console.log('Fetching metadata from:', url);
 
       const response = await fetch(url);
@@ -81,38 +80,55 @@ export class MemStorage implements IStorage {
     }
   }
 
-  private async initializeBusinesses() {
+  private async initialize() {
     try {
-      const metadata = await this.loadMetadataFromFile();
-      const businessesData = metadata.businesses;
+      const regions = [
+        {
+          id: 'arkansas',
+          name: 'Arkansas',
+          url: 'https://raw.githubusercontent.com/atlasgrowth/Arkansasplumbers/main/data/processed/metadata.json'
+        },
+        {
+          id: 'alabama',
+          name: 'Alabama',
+          url: 'https://raw.githubusercontent.com/atlasgrowth/alabamaplumbersnowebsite/main/data/processed/metadata.json'
+        }
+      ];
 
-      console.log('Initializing businesses, found:', Object.keys(businessesData).length);
+      for (const region of regions) {
+        console.log(`Fetching metadata for ${region.name} from: ${region.url}`);
+        const metadata = await this.loadMetadataFromFile(region.url);
+        const businessesData = metadata.businesses;
 
-      // Load all businesses from the metadata
-      Object.entries(businessesData).forEach(([siteId, business]) => {
-        const id = this.currentId++;
-        const newBusiness: Business = {
-          id,
-          siteId,
-          name: business.name,
-          placeId: business.place_id,
-          rating: business.rating ?? null,
-          totalReviews: business.total_reviews ?? null,
-          hasWebsite: business.has_website ?? false,
-          hasFacebook: business.has_facebook ?? false,
-          city: business.city ?? null,
-          pipelineStage: "website_created",
-          lastViewed: null,
-          totalViews: 0,
-          notes: null,
-          metadata: {
-            scores: business.scores ?? { photo_score: 0, facebook_score: 0 }
-          }
-        };
-        this.businesses.set(siteId, newBusiness);
-      });
+        console.log(`Initializing businesses for ${region.name}, found:`, Object.keys(businessesData).length);
 
-      console.log(`Successfully loaded ${this.businesses.size} businesses from GitHub metadata`);
+        // Load all businesses from the metadata
+        Object.entries(businessesData).forEach(([siteId, business]) => {
+          const id = this.currentId++;
+          const newBusiness: Business = {
+            id,
+            siteId,
+            name: business.name,
+            placeId: business.place_id,
+            rating: business.rating ?? null,
+            totalReviews: business.total_reviews ?? null,
+            hasWebsite: business.has_website ?? false,
+            hasFacebook: business.has_facebook ?? false,
+            city: business.city ?? null,
+            pipelineStage: "website_created",
+            lastViewed: null,
+            totalViews: 0,
+            notes: null,
+            region: region.id, // Add region information
+            metadata: {
+              scores: business.scores ?? { photo_score: 0, facebook_score: 0 }
+            }
+          };
+          this.businesses.set(siteId, newBusiness);
+        });
+
+        console.log(`Successfully loaded ${this.businesses.size} businesses from ${region.name} GitHub metadata`);
+      }
     } catch (error) {
       console.error('Error initializing businesses:', error);
       throw error;

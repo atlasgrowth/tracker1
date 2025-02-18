@@ -7,6 +7,7 @@ export const businesses = pgTable("businesses", {
   siteId: text("site_id").notNull().unique(),
   name: text("name").notNull(),
   placeId: text("place_id").notNull(),
+  region: text("region").notNull(),
   rating: integer("rating"),
   totalReviews: integer("total_reviews"),
   hasWebsite: boolean("has_website"),
