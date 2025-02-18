@@ -91,7 +91,7 @@ export class MemStorage implements IStorage {
         {
           id: 'alabama',
           name: 'Alabama',
-          url: 'https://raw.githubusercontent.com/atlasgrowth/alabamaplumbersnowebsite/main/data/processed/metadata.json'
+          url: 'https://raw.githubusercontent.com/atlasgrowth/alabama-plumbers-no-website/main/data/metadata.json'
         }
       ];
 
