@@ -123,7 +123,38 @@ export default function BusinessDetails() {
                     <p className="text-sm text-gray-600">Has Facebook</p>
                     <p className="font-medium">{business.hasFacebook ? "Yes" : "No"}</p>
                   </div>
+                  {business.ownerName && (
+                    <div>
+                      <p className="text-sm text-gray-600">Owner Name</p>
+                      <p className="font-medium">{business.ownerName}</p>
+                    </div>
+                  )}
+                  {business.phone && (
+                    <div>
+                      <p className="text-sm text-gray-600">Phone</p>
+                      <p className="font-medium">
+                        <a href={`tel:${business.phone}`} className="text-blue-600 hover:underline">{business.phone}</a>
+                        <a href={`sms:${business.phone}`} className="ml-2 text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded hover:bg-blue-200">
+                          Text
+                        </a>
+                      </p>
+                    </div>
+                  )}
                 </div>
+                {business.introduction && (
+                  <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+                    <p className="text-sm text-gray-600 mb-2">Introduction</p>
+                    <p className="text-sm">{business.introduction}</p>
+                  </div>
+                )}
+                {business.reviewLink && (
+                  <div className="mt-4">
+                    <a href={business.reviewLink} target="_blank" rel="noopener noreferrer" 
+                       className="text-sm text-blue-600 hover:underline">
+                      Leave a Review
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
 
