@@ -26,9 +26,19 @@ export function AnalyticsDashboard({ siteId }: AnalyticsDashboardProps) {
   const { data: analytics, isLoading: analyticsLoading } = useQuery({
     queryKey: [`/api/businesses/${siteId}/analytics`],
     queryFn: async () => {
-      const resp = await fetch(`/api/businesses/${siteId}/analytics`);
-      if (!resp.ok) throw new Error('Failed to fetch analytics');
-      return resp.json();
+      try {
+        const resp = await fetch(`/api/businesses/${siteId}/analytics`);
+        if (!resp.ok) {
+          console.error('Analytics fetch failed:', await resp.text());
+          throw new Error('Failed to fetch analytics');
+        }
+        const data = await resp.json();
+        console.log('Fetched analytics:', data);
+        return data;
+      } catch (error) {
+        console.error('Analytics error:', error);
+        throw error;
+      }
     },
     refetchInterval: 5000
   });

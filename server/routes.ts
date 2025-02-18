@@ -179,6 +179,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const timestamp = new Date().toLocaleString();
       console.log(`[${timestamp}] Received analytics from ${req.params.siteId}`);
       console.log('Request body:', JSON.stringify(req.body, null, 2));
+      console.log('Request headers:', JSON.stringify(req.headers, null, 2));
       const result = sessionSchema.safeParse(req.body);
       if (!result.success) {
         console.log('Validation errors:', result.error.errors);
