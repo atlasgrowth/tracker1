@@ -5,26 +5,38 @@ import { BusinessList } from "@/components/business-list";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { Business } from "@shared/schema";
 import { PIPELINE_STAGES } from "@/lib/constants";
 
+const PIPELINES = [
+  { id: "arkansas", name: "Arkansas Plumbers" },
+  { id: "alabama", name: "Alabama Plumbers" }
+];
+
 export default function Dashboard() {
   const [searchTerm, setSearchTerm] = React.useState("");
+  const [selectedPipeline, setSelectedPipeline] = React.useState<string>(PIPELINES[0].id);
+  
   const { data: businesses, isLoading } = useQuery<Business[]>({
     queryKey: ["/api/businesses"]
   });
 
   const filteredBusinesses = React.useMemo(() => {
     if (!businesses) return [];
-    if (!searchTerm) return businesses;
     
-    const search = searchTerm.toLowerCase();
-    return businesses.filter(b => 
-      b.name.toLowerCase().includes(search) || 
-      b.city?.toLowerCase().includes(search) ||
-      b.region?.toLowerCase().includes(search)
-    );
-  }, [businesses, searchTerm]);
+    let filtered = businesses.filter(b => b.region === selectedPipeline);
+    
+    if (searchTerm) {
+      const search = searchTerm.toLowerCase();
+      filtered = filtered.filter(b => 
+        b.name.toLowerCase().includes(search) || 
+        b.city?.toLowerCase().includes(search)
+      );
+    }
+    
+    return filtered;
+  }, [businesses, searchTerm, selectedPipeline]);
 
   if (isLoading) {
     return (
@@ -55,17 +67,31 @@ export default function Dashboard() {
     <div className="container mx-auto p-4 space-y-8">
       <Card className="border-0 shadow-lg">
         <CardHeader className="border-b bg-gradient-to-r from-blue-50 to-blue-100">
-          <div className="flex justify-between items-center">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <CardTitle className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
               Pipeline Dashboard
             </CardTitle>
-            <Input
-              type="search"
-              placeholder="Search businesses..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="max-w-xs"
-            />
+            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+              <Select value={selectedPipeline} onValueChange={setSelectedPipeline}>
+                <SelectTrigger className="w-[200px]">
+                  <SelectValue placeholder="Select Pipeline" />
+                </SelectTrigger>
+                <SelectContent>
+                  {PIPELINES.map(pipeline => (
+                    <SelectItem key={pipeline.id} value={pipeline.id}>
+                      {pipeline.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Input
+                type="search"
+                placeholder="Search businesses..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full sm:w-[200px]"
+              />
+            </div>
           </div>
         </CardHeader>
         <CardContent className="p-6">
