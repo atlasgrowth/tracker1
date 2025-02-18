@@ -17,6 +17,10 @@ export const businesses = pgTable("businesses", {
   lastViewed: timestamp("last_viewed"),
   totalViews: integer("total_views").default(0),
   notes: text("notes"),
+  ownerName: text("owner_name"),
+  introduction: text("introduction"),
+  phone: text("phone"),
+  reviewLink: text("review_link"),
   metadata: jsonb("metadata")
 });
 

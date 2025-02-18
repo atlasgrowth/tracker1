@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { Card, CardContent } from "@/components/ui/card";
-import { Building2, Star, MessageSquare } from "lucide-react";
+import { Building2, Star, MessageSquare, Phone } from "lucide-react";
 import type { Business } from "@shared/schema";
 
 interface BusinessListProps {
@@ -20,8 +20,25 @@ export function BusinessList({ businesses }: BusinessListProps) {
                     <Building2 className="h-4 w-4 text-gray-500" />
                     <h3 className="font-medium">{business.name}</h3>
                   </div>
-                  <div className="text-sm text-gray-500">
-                    {business.city}
+                  <div className="text-sm text-gray-500 space-y-1">
+                    {business.ownerName && (
+                      <div>Owner: {business.ownerName}</div>
+                    )}
+                    {business.city && (
+                      <div>{business.city}</div>
+                    )}
+                    {business.phone && (
+                      <div className="flex items-center gap-2">
+                        <Phone className="h-4 w-4" />
+                        <a 
+                          href={`tel:${business.phone}`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="text-blue-600 hover:underline"
+                        >
+                          {business.phone}
+                        </a>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
