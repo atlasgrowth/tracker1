@@ -1,28 +1,30 @@
+
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { BusinessList } from "@/components/business-list";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "@/components/ui/input";
 import type { Business } from "@shared/schema";
 import { PIPELINE_STAGES } from "@/lib/constants";
 
 export default function Dashboard() {
-  const [selectedRegion, setSelectedRegion] = React.useState<string>("all");
+  const [searchTerm, setSearchTerm] = React.useState("");
   const { data: businesses, isLoading } = useQuery<Business[]>({
     queryKey: ["/api/businesses"]
   });
 
-  const regions = [
-    { id: "all", name: "All Regions" },
-    { id: "arkansas", name: "Arkansas" },
-    { id: "alabama", name: "Alabama" }
-  ];
-
   const filteredBusinesses = React.useMemo(() => {
     if (!businesses) return [];
-    return selectedRegion === "all" 
-      ? businesses 
-      : businesses.filter(b => b.region === selectedRegion);
-  }, [businesses, selectedRegion]);
+    if (!searchTerm) return businesses;
+    
+    const search = searchTerm.toLowerCase();
+    return businesses.filter(b => 
+      b.name.toLowerCase().includes(search) || 
+      b.city?.toLowerCase().includes(search) ||
+      b.region?.toLowerCase().includes(search)
+    );
+  }, [businesses, searchTerm]);
 
   if (isLoading) {
     return (
@@ -57,15 +59,13 @@ export default function Dashboard() {
             <CardTitle className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
               Pipeline Dashboard
             </CardTitle>
-            <select 
-              value={selectedRegion}
-              onChange={(e) => setSelectedRegion(e.target.value)}
-              className="px-4 py-2 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-              {regions.map(region => (
-                <option key={region.id} value={region.id}>{region.name}</option>
-              ))}
-            </select>
+            <Input
+              type="search"
+              placeholder="Search businesses..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="max-w-xs"
+            />
           </div>
         </CardHeader>
         <CardContent className="p-6">
