@@ -305,169 +305,169 @@ def scrape_all_reviews():
         "ChIJUTOiU54VyYcRofbbwWiSh48",
         "ChIJk2fjmU6jyYcRlh0r36Fmxxo",
         "ChIJmeR1LJJryYcRGDLs_OaQy-g",
-    "ChIJ01Gxt3FTzIcRPuYcp_ziPN0",
-            "ChIJC6GpNPlSzIcRHSxz7el2OaA",
-            "ChIJFyYoaqZTzIcRrmTdw7b6bPE",
-            "ChIJ5wxGj1hTzIcRpm1PEtF2yy8",
-            "ChIJo5L2URdTzIcRKm_2bjafSDg",
-            "ChIJybKL2W5TzIcRyg3V3rabb9A",
-            "ChIJPTfpgPdVzIcR39bBexfMt3E",
-            "ChIJsZUSNWhkJkERoPrAbKC-sY4",
-            "ChIJz_IWez6Ky4cRaBj9e9Busog",
-            "ChIJPSyqQGYGbKoRG7_jbx26N3o",
-            "ChIJob7fFS8QhUMR0S_h2hHsyKc",
-            "ChIJbTGjjU0VIGkRRzx1BeJ6yZU",
-            "ChIJLbdFML2pzYcR6jGXgnuRqOQ",
-            "ChIJFWQoopypzYcRJcRe5w8wXYc",
-            "ChIJZbHX9OJLzIcRmXJ-uOhlS60",
-            "ChIJ4yv2GzexzYcRWB-m5kBBk5I",
-            "ChIJ93kFXXADM4YRngHmBesCES4",
-            "ChIJR9MjaDVFzIcR5avoJVl4HP4",
-            "ChIJ94uSK75BzIcRMVgllOFqOUg",
-            "ChIJuy2OD22W-isR1IVLNzBWGUU",
-            "ChIJjTKrGVaWBSERdaDHR-YtR6o",
-            "ChIJF66ylsWrzYcRqbNOqAuAauo",
-            "ChIJvaDDG217FQER447PudrS5jc",
-            "ChIJUwPOraMfByYR-z70NTRgQTY",
-            "ChIJQ8x1nECXYgsRaXW9Sizrbag",
-            "ChIJRcIz0B6LsSkRycEthRci2p4",
-            "ChIJCQjhiGX2yocRtCnS5asLCE0",
-            "ChIJFaXmFROFy4cRbamqr_safpk",
-            "ChIJo9HuUpVN0ocRZUzLlafA9iY",
-            "ChIJbXQs7kp4eCERMEYEb0GLjb0",
-            "ChIJR9OIQfhLh4gRxV9uS5PlvgU",
-            "ChIJl5JNf5hOh4gRQqqJd_EhWx4",
-            "ChIJW9aIInlFh4gRMa5cFLdWbYY",
-            "ChIJ3efxnNXFfYgR9cMZpAZMuXQ",
-            "ChIJrehgvxROzYcR-YCz3kwduQM"
-        ]
+        "ChIJ01Gxt3FTzIcRPuYcp_ziPN0",
+        "ChIJC6GpNPlSzIcRHSxz7el2OaA",
+        "ChIJFyYoaqZTzIcRrmTdw7b6bPE",
+        "ChIJ5wxGj1hTzIcRpm1PEtF2yy8",
+        "ChIJo5L2URdTzIcRKm_2bjafSDg",
+        "ChIJybKL2W5TzIcRyg3V3rabb9A",
+        "ChIJPTfpgPdVzIcR39bBexfMt3E",
+        "ChIJsZUSNWhkJkERoPrAbKC-sY4",
+        "ChIJz_IWez6Ky4cRaBj9e9Busog",
+        "ChIJPSyqQGYGbKoRG7_jbx26N3o",
+        "ChIJob7fFS8QhUMR0S_h2hHsyKc",
+        "ChIJbTGjjU0VIGkRRzx1BeJ6yZU",
+        "ChIJLbdFML2pzYcR6jGXgnuRqOQ",
+        "ChIJFWQoopypzYcRJcRe5w8wXYc",
+        "ChIJZbHX9OJLzIcRmXJ-uOhlS60",
+        "ChIJ4yv2GzexzYcRWB-m5kBBk5I",
+        "ChIJ93kFXXADM4YRngHmBesCES4",
+        "ChIJR9MjaDVFzIcR5avoJVl4HP4",
+        "ChIJ94uSK75BzIcRMVgllOFqOUg",
+        "ChIJuy2OD22W-isR1IVLNzBWGUU",
+        "ChIJjTKrGVaWBSERdaDHR-YtR6o",
+        "ChIJF66ylsWrzYcRqbNOqAuAauo",
+        "ChIJvaDDG217FQER447PudrS5jc",
+        "ChIJUwPOraMfByYR-z70NTRgQTY",
+        "ChIJQ8x1nECXYgsRaXW9Sizrbag",
+        "ChIJRcIz0B6LsSkRycEthRci2p4",
+        "ChIJCQjhiGX2yocRtCnS5asLCE0",
+        "ChIJFaXmFROFy4cRbamqr_safpk",
+        "ChIJo9HuUpVN0ocRZUzLlafA9iY",
+        "ChIJbXQs7kp4eCERMEYEb0GLjb0",
+        "ChIJR9OIQfhLh4gRxV9uS5PlvgU",
+        "ChIJl5JNf5hOh4gRQqqJd_EhWx4",
+        "ChIJW9aIInlFh4gRMa5cFLdWbYY",
+        "ChIJ3efxnNXFfYgR9cMZpAZMuXQ",
+        "ChIJrehgvxROzYcR-YCz3kwduQM"
+    ]
 
-        # Configure the API request
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {token}"
+    # Configure the API request
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {token}"
+    }
+
+    all_results = []
+    simplified_reviews = []
+    batch_size = 10  # Process in batches of 10
+
+    print(f"Found {len(place_ids)} place IDs to process")
+
+    # Process in batches
+    for i in range(0, len(place_ids), batch_size):
+        batch = place_ids[i:i+batch_size]
+        print(f"Processing batch {i//batch_size + 1} of {(len(place_ids)-1)//batch_size + 1} ({len(batch)} place IDs)")
+
+        payload = {
+            "placeIds": batch,
+            "language": "en",
+            "maxReviews": 0,  # No limit - get all available reviews
+            "includeNonTextReviews": False
         }
 
-        all_results = []
-        simplified_reviews = []
-        batch_size = 10  # Process in batches of 10
-
-        print(f"Found {len(place_ids)} place IDs to process")
-
-        # Process in batches
-        for i in range(0, len(place_ids), batch_size):
-            batch = place_ids[i:i+batch_size]
-            print(f"Processing batch {i//batch_size + 1} of {(len(place_ids)-1)//batch_size + 1} ({len(batch)} place IDs)")
-
-            payload = {
-                "placeIds": batch,
-                "language": "en",
-                "maxReviews": 0,  # No limit - get all available reviews
-                "includeNonTextReviews": False
-            }
-
-            try:
-                start_time = time.time()
-                print(f"Sending request to Apify...")
-                response = requests.post(api_url, headers=headers, json=payload)
-                response.raise_for_status()
-
-                # Add results to our collection
-                batch_results = response.json()
-                all_results.extend(batch_results)
-
-                elapsed_time = time.time() - start_time
-                print(f"Successfully scraped {len(batch_results)} reviews in {elapsed_time:.1f} seconds")
-
-                # Immediately process this batch to simplified format
-                for review in batch_results:
-                    # Format the date nicely
-                    try:
-                        pub_date = datetime.fromisoformat(review.get('publishedAtDate', '').replace('Z', '+00:00'))
-                        formatted_date = pub_date.strftime('%Y-%m-%d')
-                    except (ValueError, TypeError):
-                        formatted_date = review.get('publishAt', 'Unknown date')
-
-                    business_name = review.get('title', 'Unknown Business')
-                    place_id = review.get('placeId', 'Unknown Place ID')
-
-                    simplified_review = {
-                        "business_name": business_name,
-                        "place_id": place_id,
-                        "reviewer_name": review.get('name', 'Anonymous'),
-                        "text": review.get('text', ''),
-                        "date": formatted_date,
-                        "stars": review.get('stars', 0)
-                    }
-                    simplified_reviews.append(simplified_review)
-
-                # Save partial results after each batch
-                with open(f'reviews_batch_{i//batch_size + 1}.json', 'w') as f:
-                    json.dump(simplified_reviews[-len(batch_results):], f, indent=2)
-
-                print(f"Saved batch results to reviews_batch_{i//batch_size + 1}.json")
-
-                # Add a delay between batches to avoid rate limiting
-                if i + batch_size < len(place_ids):
-                    delay = 10  # 10 seconds between batches
-                    print(f"Waiting {delay} seconds before next batch...")
-                    time.sleep(delay)
-
-            except requests.exceptions.RequestException as e:
-                print(f"Error processing batch: {e}")
-                print("Saving error information...")
-                with open(f'error_batch_{i//batch_size + 1}.txt', 'w') as f:
-                    f.write(f"Error occurred at: {datetime.now()}\n")
-                    f.write(f"Batch: {batch}\n")
-                    f.write(f"Error: {str(e)}\n")
-                print(f"Continuing with next batch in 30 seconds...")
-                time.sleep(30)
-                continue
-
-        # After all batches, combine and save final results
         try:
-            print("\nProcessing complete! Combining all results...")
+            start_time = time.time()
+            print(f"Sending request to Apify...")
+            response = requests.post(api_url, headers=headers, json=payload)
+            response.raise_for_status()
 
-            # Save all results to a single file
-            with open('all_google_reviews.json', 'w') as f:
-                json.dump(all_results, f, indent=2)
+            # Add results to our collection
+            batch_results = response.json()
+            all_results.extend(batch_results)
 
-            # Save simplified version
-            with open('simplified_reviews.json', 'w') as f:
-                json.dump(simplified_reviews, f, indent=2)
+            elapsed_time = time.time() - start_time
+            print(f"Successfully scraped {len(batch_results)} reviews in {elapsed_time:.1f} seconds")
 
-            # Create an organized version by business
-            reviews_by_business = {}
-            for review in simplified_reviews:
-                business_name = review['business_name']
-                place_id = review['place_id']
-                key = f"{business_name} ({place_id})"
+            # Immediately process this batch to simplified format
+            for review in batch_results:
+                # Format the date nicely
+                try:
+                    pub_date = datetime.fromisoformat(review.get('publishedAtDate', '').replace('Z', '+00:00'))
+                    formatted_date = pub_date.strftime('%Y-%m-%d')
+                except (ValueError, TypeError):
+                    formatted_date = review.get('publishAt', 'Unknown date')
 
-                if key not in reviews_by_business:
-                    reviews_by_business[key] = []
+                business_name = review.get('title', 'Unknown Business')
+                place_id = review.get('placeId', 'Unknown Place ID')
 
-                # Remove business info from individual reviews to avoid duplication
-                review_copy = review.copy()
-                del review_copy['business_name']
-                del review_copy['place_id']
-                reviews_by_business[key].append(review_copy)
+                simplified_review = {
+                    "business_name": business_name,
+                    "place_id": place_id,
+                    "reviewer_name": review.get('name', 'Anonymous'),
+                    "text": review.get('text', ''),
+                    "date": formatted_date,
+                    "stars": review.get('stars', 0)
+                }
+                simplified_reviews.append(simplified_review)
 
-            with open('reviews_by_business.json', 'w') as f:
-                json.dump(reviews_by_business, f, indent=2)
+            # Save partial results after each batch
+            with open(f'reviews_batch_{i//batch_size + 1}.json', 'w') as f:
+                json.dump(simplified_reviews[-len(batch_results):], f, indent=2)
 
-            print(f"\nScraping and processing complete!")
-            print(f"Total reviews collected: {len(all_results)}")
-            print(f"Total businesses: {len(reviews_by_business)}")
-            print(f"Results saved to three files:")
-            print(f"1. all_google_reviews.json - Full data")
-            print(f"2. simplified_reviews.json - Simplified format")
-            print(f"3. reviews_by_business.json - Organized by business")
+            print(f"Saved batch results to reviews_batch_{i//batch_size + 1}.json")
 
-        except Exception as e:
-            print(f"Error in final processing: {e}")
-            print("Individual batch results are still available in the batch files.")
+            # Add a delay between batches to avoid rate limiting
+            if i + batch_size < len(place_ids):
+                delay = 10  # 10 seconds between batches
+                print(f"Waiting {delay} seconds before next batch...")
+                time.sleep(delay))
 
-        return all_results
+        except requests.exceptions.RequestException as e:
+            print(f"Error processing batch: {e}")
+            print("Saving error information...")
+            with open(f'error_batch_{i//batch_size + 1}.txt', 'w') as f:
+                f.write(f"Error occurred at: {datetime.now()}\n")
+                f.write(f"Batch: {batch}\n")
+                f.write(f"Error: {str(e)}\n")
+            print(f"Continuing with next batch in 30 seconds...")
+            time.sleep(30)
+            continue
 
-    if __name__ == "__main__":
-        scrape_all_reviews()
+    # After all batches, combine and save final results
+    try:
+        print("\nProcessing complete! Combining all results...")
+
+        # Save all results to a single file
+        with open('all_google_reviews.json', 'w') as f:
+            json.dump(all_results, f, indent=2)
+
+        # Save simplified version
+        with open('simplified_reviews.json', 'w') as f:
+            json.dump(simplified_reviews, f, indent=2)
+
+        # Create an organized version by business
+        reviews_by_business = {}
+        for review in simplified_reviews:
+            business_name = review['business_name']
+            place_id = review['place_id']
+            key = f"{business_name} ({place_id})"
+
+            if key not in reviews_by_business:
+                reviews_by_business[key] = []
+
+            # Remove business info from individual reviews to avoid duplication
+            review_copy = review.copy()
+            del review_copy['business_name']
+            del review_copy['place_id']
+            reviews_by_business[key].append(review_copy)
+
+        with open('reviews_by_business.json', 'w') as f:
+            json.dump(reviews_by_business, f, indent=2)
+
+        print(f"\nScraping and processing complete!")
+        print(f"Total reviews collected: {len(all_results)}")
+        print(f"Total businesses: {len(reviews_by_business)}")
+        print(f"Results saved to three files:")
+        print(f"1. all_google_reviews.json - Full data")
+        print(f"2. simplified_reviews.json - Simplified format")
+        print(f"3. reviews_by_business.json - Organized by business")
+
+    except Exception as e:
+        print(f"Error in final processing: {e}")
+        print("Individual batch results are still available in the batch files.")
+
+    return all_results
+
+if __name__ == "__main__":
+    scrape_all_reviews()
